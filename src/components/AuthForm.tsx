@@ -8,6 +8,9 @@ import Link from "next/link";
 import { toast } from "sonner";
 import FormField from "@/components/FormField";
 import { useRouter } from "next/navigation";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebase/client";
+import { Signin, Signup } from "@/lib/actions/auth.action";
 
 type FormType = "sign-in" | "sign-up";
 
@@ -25,7 +28,7 @@ const authFormSchema = (type: FormType) => {
 };
 
 const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
-  const route = useRouter()
+  const route = useRouter();
   const isSignPage = type === "sign-in";
   const formSchema = authFormSchema(type);
 
@@ -39,14 +42,40 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       if (type === "sign-up") {
-        toast.success("Account created successfully.")
-        route.push("/sign-in")
+        const { username, email, password } = values;
+        const userCreadentails = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const result = await Signup({
+          uid: userCreadentails.user.uid,
+          username: username!,
+          email,
+          password,
+        });
+
+        if (!result?.success) {
+          toast.error(result?.message);
+          return;
+        }
+
+        toast.success("Account created successfully.");
+        route.push("/sign-in");
       } else {
-        toast.success("Sign in successfully.")
-        route.push("/")
+        const { email, password } = values;
+        const userCreadentail = await signInWithEmailAndPassword(auth,email,password)
+        const idToken = await userCreadentail.user.getIdToken()
+        if(!idToken){
+          toast.error("Sign in Failed")
+          return
+        }
+        await Signin({email,idToken})
+        toast.success("Sign in successfully.");
+        route.push("/");
       }
     } catch (error) {
       console.log(error);
