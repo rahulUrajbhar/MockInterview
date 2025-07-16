@@ -9,10 +9,10 @@ const page = () => {
         <HeroSection />
       </section>
       <section>
-        <InterviewSection type={"Your Complited Interviews"}/>
+        <InterviewSection type={"Your Complited Interview"}/>
       </section>
       <section>
-        <InterviewSection type={"Pick Your Interviews"}/>
+        <InterviewSection type={"Pick Your Interview"}/>
       </section>
     </>
   );
