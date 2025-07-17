@@ -1,8 +1,11 @@
+import Agent from '@/components/agent/Agent'
 import React from 'react'
 
 const page = () => {
   return (
-    <div>Interview</div>
+    <>
+     <Agent userName={"Rahul"} userId={"user1"} type={"generate"}/>
+    </>
   )
 }
 

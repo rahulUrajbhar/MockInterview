@@ -1,12 +1,10 @@
-"use client"
+"use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
-import { Button } from "@/components/ui/button";
+import NavHeader from "./NavHeader";
 
 const Header = () => {
   const route = usePathname();
-
   const NoHeader = route === "/sign-in" || route === "/sign-up";
 
   return (
@@ -21,14 +19,7 @@ const Header = () => {
               width={350}
             />
           </Link>
-          <ul className="flex items-center justify-center gap-10 text-xl font-sans">
-            <li className="cursor-pointer">Interview</li>
-            <li>
-              <Link href="/sign-in">
-                <Button className="cursor-pointer">Sign in</Button>
-              </Link>
-            </li>
-          </ul>
+          <NavHeader />
         </nav>
       )}
     </header>

@@ -1,4 +1,4 @@
-import HeroSection from "@/components/HeroSection";
+import HeroSection from "@/components/herosection/HeroSection";
 import InterviewSection from "@/components/homeInterviewSection/InterviewSection";
 import React from "react";
 
